@@ -33,10 +33,12 @@ export class EditPokemonComponent implements OnChanges {
         this.btnSubmit.nativeElement.disabled = false;
         this.btnSubmit.nativeElement.classList.add('btn-primary');
         this.btnSubmit.nativeElement.classList.remove('btn-warning');
+        this.btnSubmit.nativeElement.textContent = 'Guardar';
       } else {
         this.btnSubmit.nativeElement.disabled = true;
         this.btnSubmit.nativeElement.classList.add('btn-warning');
         this.btnSubmit.nativeElement.classList.remove('btn-primary');
+        this.btnSubmit.nativeElement.textContent = 'Error';
       }
     });
   }
@@ -45,6 +47,8 @@ export class EditPokemonComponent implements OnChanges {
     if (changes['pokemonId']) {
       const newPokemonId = changes['pokemonId'].currentValue;
       this.getPokemon(newPokemonId);
+      this.file = null;
+      this.pokemonForm.get('image').setValue(null);
     }
   }
 
