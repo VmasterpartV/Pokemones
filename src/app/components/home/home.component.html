@@ -1,0 +1,28 @@
+<div class="container">
+    <h2>Pokémon</h2>
+    <div class="d-flex justify-content-center">
+        <table class="table me-5">
+            <thead>
+                <tr>
+                    <th class="text-center">ID</th>
+                    <th class="text-center">Imagen</th>
+                    <th class="text-center">Nombre</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let pokemon of pokemons">
+                    <td class="align-middle text-center">{{ pokemon.id }}</td>
+                    <td class="align-middle text-center"><img [src]="pokemon.image" alt="Imagen de {{ pokemon.name }}"
+                            class="img-fluid"></td>
+                    <td class="align-middle text-center">{{ pokemon.name }}</td>
+                    <td class="align-middle text-center">
+                        <button class="btn btn-primary me-2" [routerLink]="['/pokemon', pokemon.id]">Editar</button>
+                        <button class="btn btn-danger" (click)="deletePokemon(pokemon.id)">Eliminar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <edit-pokemon class="col-md-4"></edit-pokemon>
+    </div>
+</div>
