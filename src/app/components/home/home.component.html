@@ -17,12 +17,12 @@
                             class="img-fluid"></td>
                     <td class="align-middle text-center">{{ pokemon.name }}</td>
                     <td class="align-middle text-center">
-                        <button class="btn btn-primary me-2" [routerLink]="['/pokemon', pokemon.id]">Editar</button>
+                        <button class="btn btn-primary me-2" (click)="editPokemon(pokemon.id)">Editar</button>
                         <button class="btn btn-danger" (click)="deletePokemon(pokemon.id)">Eliminar</button>
                     </td>
                 </tr>
             </tbody>
         </table>
-        <edit-pokemon class="col-md-4"></edit-pokemon>
+        <edit-pokemon *ngIf="selectedPokemonId" class="col-md-4" [pokemonId]="selectedPokemonId" (pokemonUpdated)="savePokemon($event)"></edit-pokemon>
     </div>
 </div>

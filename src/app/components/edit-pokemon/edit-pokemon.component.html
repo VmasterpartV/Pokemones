@@ -12,11 +12,11 @@
             accept="image/*" formControlName="image">
     </div>
     <figure *ngIf="pokemon">
-        <img [src]="pokemon.image" alt="Imagen de {{ pokemon.name }}" class="img-fluid">
+        <img [src]="imageUrl" alt="Imagen de {{ pokemon.name }}" class="img-fluid">
     </figure>
     <div class="d-flex">
         <button type="button" class="btn" [class]="pokemonForm.valid ? 'btn-primary' : 'btn-warning'"
-            [disabled]="pokemonForm.invalid" (click)="onSubmit()">Guardar</button>
-        <a class="btn btn-danger mx-2" [routerLink]="['/']">Volver</a>
+            [disabled]="pokemonForm.invalid" (click)="onSubmit()">Guardar
+        </button>
     </div>
 </form>

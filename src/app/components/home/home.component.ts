@@ -12,6 +12,7 @@ import Swal from 'sweetalert2'
 export class HomeComponent implements OnInit {
 
   pokemons: Pokemon[] = [];
+  selectedPokemonId: number;
 
   constructor(private pokemonService: PokemonService) { }
 
@@ -27,6 +28,14 @@ export class HomeComponent implements OnInit {
     } catch (error) {
       console.error(error);
     }
+  }
+
+  editPokemon(id: number) {
+    this.selectedPokemonId = id;
+  }
+
+  savePokemon(pokemon: Pokemon) {
+    this.pokemonService.updatePokemon(pokemon.id - 1, pokemon);
   }
 
   deletePokemon(id: number) {
