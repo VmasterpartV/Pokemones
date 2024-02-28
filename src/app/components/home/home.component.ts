@@ -49,6 +49,9 @@ export class HomeComponent implements OnInit {
       confirmButtonText: 'Sí, bórralo!'
     }).then((result) => {
       if (result.isConfirmed) {
+        if (id === this.selectedPokemonId) {
+          this.selectedPokemonId = null;
+        }
         this.pokemonService.deletePokemon(id - 1).subscribe((data: any) => {
           this.pokemons = data.results;
         }, error => {
