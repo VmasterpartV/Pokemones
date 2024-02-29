@@ -13,11 +13,14 @@ export class HomeComponent implements OnInit {
 
   pokemons: Pokemon[] = [];
   selectedPokemonId: number;
+  currentPage = 1;
+  lastPage = 0;
 
   constructor(private pokemonService: PokemonService) { }
 
   ngOnInit(): void {
     this.getPokemons();
+    this.lastPage = this.pokemonService.totalPages;
   }
 
   getPokemons() {
@@ -62,9 +65,24 @@ export class HomeComponent implements OnInit {
           text: 'El pokemon ha sido eliminado.',
           icon: 'success',
           confirmButtonColor: '#3085d6'
-      })
+        })
       }
     });
+  }
+
+  setPage(page: number) {
+    this.currentPage = page;
+    this.pokemonService.offset = (page - 1) * 10;
+    this.pokemonService.getAllPokemons().subscribe(() => { });
+    this.selectedPokemonId = null;
+  }
+
+  getPagesRange() {
+    // show 3 pages before and after the current page
+    const range = 3;
+    const start = Math.max(1, this.currentPage - range);
+    const end = Math.min(this.pokemonService.totalPages, this.currentPage + range);
+    return Array(end - start + 1).fill(0).map((_, i) => start + i);
   }
 
 }

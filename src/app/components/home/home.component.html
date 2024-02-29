@@ -1,28 +1,42 @@
 <div class="container">
     <h2>Pokémon</h2>
     <div class="d-flex justify-content-center">
-        <table class="table me-5">
-            <thead>
-                <tr>
-                    <th class="text-center">ID</th>
-                    <th class="text-center">Imagen</th>
-                    <th class="text-center">Nombre</th>
-                    <th class="text-center">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let pokemon of pokemons">
-                    <td class="align-middle text-center">{{ pokemon.id }}</td>
-                    <td class="align-middle text-center"><img [src]="pokemon.image" alt="Imagen de {{ pokemon.name }}"
-                            class="img-fluid"></td>
-                    <td class="align-middle text-center">{{ pokemon.name }}</td>
-                    <td class="align-middle text-center">
-                        <button class="btn btn-primary me-2" (click)="editPokemon(pokemon.id)">Editar</button>
-                        <button class="btn btn-danger" (click)="deletePokemon(pokemon.id)">Eliminar</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <edit-pokemon *ngIf="selectedPokemonId" class="col-md-4" [pokemonId]="selectedPokemonId" (pokemonUpdated)="savePokemon($event)"></edit-pokemon>
+        <div class="table me-5">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th class="text-center">ID</th>
+                        <th class="text-center">Imagen</th>
+                        <th class="text-center">Nombre</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let pokemon of pokemons">
+                        <td class="align-middle text-center">{{ pokemon.id }}</td>
+                        <td class="align-middle text-center"><img [src]="pokemon.image"
+                                alt="Imagen de {{ pokemon.name }}" class="img-fluid"></td>
+                        <td class="align-middle text-center">{{ pokemon.name }}</td>
+                        <td class="align-middle text-center">
+                            <button class="btn btn-primary me-2" (click)="editPokemon(pokemon.id)">Editar</button>
+                            <button class="btn btn-danger" (click)="deletePokemon(pokemon.id)">Eliminar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="d-flex justify-content-end">
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination">
+                        <li class="page-item" (click)="currentPage === 1 ? '' : setPage(currentPage - 1)" [class.disabled]="currentPage === 1"><a class="page-link" href="#">Anterior</a></li>
+                        <li class="page-item" *ngFor="let pageNumber of getPagesRange()">
+                            <a class="page-link" href="#" (click)="currentPage === pageNumber ? '' : setPage(pageNumber)" [class.disabled]="currentPage === pageNumber">{{ pageNumber }}</a>
+                        </li>
+                        <li class="page-item" (click)="currentPage === lastPage ? '' : setPage(currentPage + 1)" [class.disabled]="currentPage === lastPage"><a class="page-link" href="#">Siguiente</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <edit-pokemon *ngIf="selectedPokemonId" class="col-md-4" [pokemonId]="selectedPokemonId"
+            (pokemonUpdated)="savePokemon($event)"></edit-pokemon>
     </div>
 </div>

@@ -9,7 +9,11 @@ import { Pokemon } from 'src/app/interfaces/pokemon';
 })
 export class PokemonService {
 
-  url = 'https://pokeapi.co/api/v2/pokemon?offset=0&limit=200';
+  url = 'https://pokeapi.co/api/v2/pokemon?';
+  limit = 10;
+  offset = 0;
+  total = 205;
+  totalPages = 0;
 
   private pokemonsSubject = new BehaviorSubject<Pokemon[]>([]);
   pokemons$ = this.pokemonsSubject.asObservable();
@@ -17,13 +21,24 @@ export class PokemonService {
   constructor(private http: HttpClient) {
     console.log('PokemonService');
     this.getAllPokemons().subscribe(() => { });
+    this.totalPages = Math.ceil(this.total / this.limit);
   }
 
   getAllPokemons() {
-    return this.http.get(this.url).pipe(
+    if (this.offset + this.limit > this.total) {
+      this.limit = this.total - this.offset;
+      console.log('limit', this.limit);
+      this.offset = this.total - this.limit;
+      console.log('offset', this.offset);
+    } else {
+      this.limit = 10;
+    }
+    const url = this.url + "offset=" + this.offset + "&" + "limit=" + this.limit;
+    console.log('url', url);
+    return this.http.get(url).pipe(
       map((data: any) => {
         data.results.forEach((pokemon: any, index: number) => {
-          pokemon.id = index + 1;
+          pokemon.id = index + 1 + this.offset;
           pokemon.image = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`;
         });
         this.pokemonsSubject.next(data);
@@ -37,12 +52,12 @@ export class PokemonService {
       return this.pokemonsSubject.pipe(
         map((pokemons: any) => {
           console.log('pokemons', pokemons);
-          return pokemons.results[id - 1]
+          return pokemons.results[id - 1 - this.offset]
         })
       );
     } else {
       return this.getAllPokemons().pipe(
-        map((pokemons: any) => pokemons.results[id - 1])
+        map((pokemons: any) => pokemons.results[id - 1 - this.offset])
       );
     }
   }
@@ -50,7 +65,7 @@ export class PokemonService {
   updatePokemon(id: number, pokemon: any) {
     console.log('pokeListUpdate', this.pokemonsSubject.value)
     if (this.pokemonsSubject.value['count'] > 0) {
-      this.pokemonsSubject.value['results'][id] = pokemon;
+      this.pokemonsSubject.value['results'][id - this.offset] = pokemon;
     } else {
       this.getAllPokemons().subscribe((data: any) => {
         data.results[id] = pokemon;
@@ -59,8 +74,7 @@ export class PokemonService {
   }
 
   deletePokemon(id: number) {
-    this.pokemonsSubject.value['results'].splice(id, 1)
-    // update id
+    this.pokemonsSubject.value['results'].splice(id - this.offset, 1)
     this.pokemonsSubject.value['results'].forEach((pokemon: any, index: number) => {
       pokemon.id = index + 1;
     });
